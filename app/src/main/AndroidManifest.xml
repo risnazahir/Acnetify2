@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".AcnetifyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +14,22 @@
         android:theme="@style/Theme.Acnetify"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".feature_acne.presentation.camera.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature_auth.presentation.welcome.WelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature_auth.presentation.sign_up.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature_auth.presentation.sign_in.SignInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature_acne.presentation.detail_acne.DetailAcneActivity"
+            android:exported="false" />
+        <activity
+            android:name=".core.presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
