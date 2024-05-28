@@ -40,6 +40,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -60,7 +64,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     kapt(libs.androidx.hilt.compiler)
-    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    //implementation(libs.androidx.hilt.lifecycle.viewmodel)
 
     // Retrofit
     implementation(libs.retrofit)
