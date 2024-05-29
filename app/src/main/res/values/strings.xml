@@ -53,4 +53,15 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="welcome_image">Welcome Image</string>
+    <string name="welcome_title">Welcome to Acnetify</string>
+    <string name="welcome_subtitle">From Identification to Treatment: Your Acne Solution Identify, Treat, and Transform Your Skin.</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_subtitle">Welcome back. You have been missed during this time</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_up_subtitle">Ready to explore? Create your account by filling the form below.</string>
+    <string name="back_button">Back Button</string>
 </resources>

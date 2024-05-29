@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    tools:context=".feature_acne.presentation.acne_types.AcneTypesFragment">
+    tools:context=".views.acne_types.AcneTypesFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
