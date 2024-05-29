@@ -1,11 +1,11 @@
-package com.capstone.acnetify.feature_auth.presentation.welcome
+package com.capstone.acnetify.views.auth.welcome
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.acnetify.databinding.ActivityWelcomeBinding
-import com.capstone.acnetify.feature_auth.presentation.sign_in.SignInActivity
-import com.capstone.acnetify.feature_auth.presentation.sign_up.SignUpActivity
+import com.capstone.acnetify.views.auth.sign_in.SignInActivity
+import com.capstone.acnetify.views.auth.sign_up.SignUpActivity
 
 /**
  * Activity displayed to the user upon launching the application. Provides options for logging in

@@ -1,4 +1,4 @@
-package com.capstone.acnetify.feature_profile.presentation.profile
+package com.capstone.acnetify.views.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

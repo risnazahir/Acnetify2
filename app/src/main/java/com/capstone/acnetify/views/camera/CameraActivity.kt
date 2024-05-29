@@ -1,4 +1,4 @@
-package com.capstone.acnetify.feature_acne.presentation.camera
+package com.capstone.acnetify.views.camera
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

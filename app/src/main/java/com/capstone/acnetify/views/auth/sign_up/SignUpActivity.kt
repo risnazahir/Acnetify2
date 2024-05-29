@@ -1,10 +1,10 @@
-package com.capstone.acnetify.feature_auth.presentation.sign_up
+package com.capstone.acnetify.views.auth.sign_up
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.acnetify.databinding.ActivitySignUpBinding
-import com.capstone.acnetify.feature_auth.presentation.sign_in.SignInActivity
+import com.capstone.acnetify.views.auth.sign_in.SignInActivity
 
 class SignUpActivity : AppCompatActivity() {
 

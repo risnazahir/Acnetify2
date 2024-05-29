@@ -1,4 +1,4 @@
-package com.capstone.acnetify.feature_acne.presentation.acne_types
+package com.capstone.acnetify.views.acne_types
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

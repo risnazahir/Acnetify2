@@ -1,14 +1,14 @@
-package com.capstone.acnetify.core.presentation
+package com.capstone.acnetify.views.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.capstone.acnetify.R
 import com.capstone.acnetify.databinding.ActivityMainBinding
-import com.capstone.acnetify.feature_acne.presentation.acne_types.AcneTypesFragment
-import com.capstone.acnetify.feature_acne.presentation.history_acne.HistoryAcneFragment
-import com.capstone.acnetify.feature_home.presentation.HomeFragment
-import com.capstone.acnetify.feature_profile.presentation.profile.ProfileFragment
+import com.capstone.acnetify.views.acne_types.AcneTypesFragment
+import com.capstone.acnetify.views.history_acne.HistoryAcneFragment
+import com.capstone.acnetify.views.home.HomeFragment
+import com.capstone.acnetify.views.profile.ProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(HomeFragment())
         }
 
+        @Suppress("DEPRECATION")
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {

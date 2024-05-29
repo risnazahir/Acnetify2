@@ -1,4 +1,4 @@
-package com.capstone.acnetify.feature_acne.presentation.detail_acne
+package com.capstone.acnetify.views.detail_acne
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

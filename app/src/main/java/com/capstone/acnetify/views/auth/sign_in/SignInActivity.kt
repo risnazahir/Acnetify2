@@ -1,10 +1,11 @@
-package com.capstone.acnetify.feature_auth.presentation.sign_in
+package com.capstone.acnetify.views.auth.sign_in
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.acnetify.databinding.ActivitySignInBinding
-import com.capstone.acnetify.feature_auth.presentation.sign_up.SignUpActivity
+import com.capstone.acnetify.views.auth.sign_up.SignUpActivity
+import com.capstone.acnetify.views.main.MainActivity
 
 class SignInActivity : AppCompatActivity() {
 
@@ -25,7 +26,8 @@ class SignInActivity : AppCompatActivity() {
      */
     private fun setupAction() {
         binding.btnSignIn.setOnClickListener {
-
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
         binding.btnSignUp.setOnClickListener {

@@ -1,4 +1,4 @@
-package com.capstone.acnetify.feature_acne.presentation.history_acne
+package com.capstone.acnetify.views.history_acne
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

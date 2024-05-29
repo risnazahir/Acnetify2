@@ -1,4 +1,4 @@
-package com.capstone.acnetify.feature_home.presentation
+package com.capstone.acnetify.views.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

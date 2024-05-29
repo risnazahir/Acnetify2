@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    tools:context=".feature_acne.presentation.history_acne.HistoryAcneFragment">
+    tools:context=".views.history_acne.HistoryAcneFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

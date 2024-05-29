@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    tools:context=".feature_auth.presentation.sign_up.SignUpActivity">
+    tools:context=".views.auth.sign_up.SignUpActivity">
 
     <ImageButton
         android:id="@+id/btnBack"
