@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.capstone.acnetify.R
 import com.capstone.acnetify.databinding.ActivityMainBinding
 import com.capstone.acnetify.views.acne_types.AcneTypesFragment
+import com.capstone.acnetify.views.camera.ModalBottomSheetMediaDialog
 import com.capstone.acnetify.views.history_acne.HistoryAcneFragment
 import com.capstone.acnetify.views.home.HomeFragment
 import com.capstone.acnetify.views.profile.ProfileFragment
@@ -52,8 +53,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fab.setOnClickListener {
-            // Handle FAB click, e.g., open camera or navigate to a specific fragment
-            // For example, open a new fragment or activity
+            val modal = ModalBottomSheetMediaDialog()
+            supportFragmentManager.let { modal.show(it, ModalBottomSheetMediaDialog.TAG) }
         }
     }
 

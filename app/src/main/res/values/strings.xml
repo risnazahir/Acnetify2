@@ -49,4 +49,7 @@
     <string name="profile">Profile</string>
     <string name="mock_name">Lorem Ipsum Dolor Si Amet Lorenzo</string>
     <string name="logout">Logout</string>
+    <string name="choose_image">Choose your image</string>
+    <string name="gallery">Gallery</string>
+    <string name="switch_camera">Switch camera</string>
 </resources>
