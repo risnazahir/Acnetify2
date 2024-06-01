@@ -1,11 +1,13 @@
 package com.capstone.acnetify.views.camera
 
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -27,6 +29,7 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
+    private var currentImageUri: Uri? = null
 
     /**
      * Listens for changes in device orientation.
@@ -65,20 +68,46 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Launcher for the gallery activity result.
+     *
+     * This variable registers an activity result launcher for picking visual media, such as images,
+     * from the gallery. When an image is selected from the gallery, the launcher callback assigns
+     * the URI of the selected image to the currentImageUri property.
+     */
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            // Assigns the URI of the selected image to the currentImageUri property
+            currentImageUri = uri
+
+            // Start UploadActivity with the selected image URI
+            startUploadActivity(uri)
+        } else {
+            // Prints a debug log message if no media is selected
+            Log.d("Photo Picker", "No media selected")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Set onClickListener
-        binding.switchCamera.setOnClickListener {
+        // Setup setOnClickListener
+        binding.btnBack.setOnClickListener { finish() }
+        binding.captureImage.setOnClickListener { takePhoto() }
+        binding.btnSwitchCamera.setOnClickListener {
             cameraSelector =
                 if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) CameraSelector.DEFAULT_FRONT_CAMERA
                 else CameraSelector.DEFAULT_BACK_CAMERA
 
             startCamera()
         }
-        binding.captureImage.setOnClickListener { takePhoto() }
+        binding.btnGallery.setOnClickListener {
+            launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
     }
 
     /**
@@ -180,25 +209,13 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
 
-                /**
-                 * Invoked when the image is successfully saved.
-                 *
-                 * This method sends back the URI of the saved image via an intent and finishes the activity.
-                 * @param output: Information about the saved image file.
-                 */
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val intent = Intent()
-                    intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
-                    setResult(CAMERAX_RESULT, intent)
-                    finish()
+                    // Retrieve the URI of the saved image
+                    val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
+                    // Start UploadActivity with the saved image URI
+                    startUploadActivity(savedUri)
                 }
 
-                /**
-                 * Invoked when an error occurs while saving the image.
-                 *
-                 * This method displays a toast message indicating the failure and logs the error.
-                 * @param e: The exception representing the error.
-                 */
                 override fun onError(e: ImageCaptureException) {
                     Toast.makeText(
                         this@CameraActivity,
@@ -212,13 +229,28 @@ class CameraActivity : AppCompatActivity() {
     }
 
     /**
+     * Starts the UploadActivity with the given image URI.
+     *
+     * This function creates an intent to start the UploadActivity and passes the image URI
+     * as an extra to the intent.
+     *
+     * @param imageUri: The URI of the image to be uploaded.
+     */
+    private fun startUploadActivity(imageUri: Uri) {
+//        val intent = Intent(this, UploadActivity::class.java).apply {
+//            putExtra(EXTRA_CAMERAX_IMAGE, imageUri.toString())
+//        }
+//        startActivity(intent)
+    }
+
+    /**
      * Companion object holding constants and shared properties for CameraActivity.
      */
     companion object {
-        val TAG = CameraActivity::class.java.simpleName
+        val TAG: String = CameraActivity::class.java.simpleName
         // Extra key for passing captured image URI between activities
-        const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
+        //const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
         // Result code for camera operations
-        const val CAMERAX_RESULT = 200
+        //const val CAMERAX_RESULT = 200
     }
 }

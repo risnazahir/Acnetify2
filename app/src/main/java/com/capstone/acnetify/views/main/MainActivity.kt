@@ -1,6 +1,7 @@
 package com.capstone.acnetify.views.main
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -11,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.capstone.acnetify.R
 import com.capstone.acnetify.databinding.ActivityMainBinding
 import com.capstone.acnetify.views.acne_types.AcneTypesFragment
-import com.capstone.acnetify.views.camera.ModalBottomSheetMediaDialog
+import com.capstone.acnetify.views.camera.CameraActivity
 import com.capstone.acnetify.views.history_acne.HistoryAcneFragment
 import com.capstone.acnetify.views.home.HomeFragment
 import com.capstone.acnetify.views.profile.ProfileFragment
@@ -40,7 +41,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show()
             }
         }
-
 
     /**
      * Checks if all required permissions are granted.
@@ -95,8 +95,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fab.setOnClickListener {
-            val modal = ModalBottomSheetMediaDialog()
-            supportFragmentManager.let { modal.show(it, ModalBottomSheetMediaDialog.TAG) }
+            startActivity(Intent(this, CameraActivity::class.java))
         }
     }
 
