@@ -1,5 +1,6 @@
 package com.capstone.acnetify.views.camera
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.capstone.acnetify.databinding.ActivityCameraBinding
 import com.capstone.acnetify.utils.ImageUtils
+import com.capstone.acnetify.views.acne_upload.AcneUploadActivity
 
 /**
  * A simple activity to capture images using CameraX.
@@ -237,10 +239,10 @@ class CameraActivity : AppCompatActivity() {
      * @param imageUri: The URI of the image to be uploaded.
      */
     private fun startUploadActivity(imageUri: Uri) {
-//        val intent = Intent(this, UploadActivity::class.java).apply {
-//            putExtra(EXTRA_CAMERAX_IMAGE, imageUri.toString())
-//        }
-//        startActivity(intent)
+        val intent = Intent(this, AcneUploadActivity::class.java).apply {
+            putExtra(EXTRA_CAMERAX_IMAGE, imageUri.toString())
+        }
+        startActivity(intent)
     }
 
     /**
@@ -249,7 +251,7 @@ class CameraActivity : AppCompatActivity() {
     companion object {
         val TAG: String = CameraActivity::class.java.simpleName
         // Extra key for passing captured image URI between activities
-        //const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
+        const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
         // Result code for camera operations
         //const val CAMERAX_RESULT = 200
     }
