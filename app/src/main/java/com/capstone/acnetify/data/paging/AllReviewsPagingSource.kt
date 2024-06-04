@@ -1,9 +1,11 @@
 package com.capstone.acnetify.data.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.capstone.acnetify.data.model.ReviewsModel
 import com.capstone.acnetify.data.remote.ApiService
+import com.capstone.acnetify.utils.MockDataGenerator.generateMockReviews
 
 /**
  * Paging source responsible for loading pages of review data from the API.
@@ -53,11 +55,14 @@ class AllReviewsPagingSource(private val apiService: ApiService) : PagingSource<
             val limit = params.loadSize
             val offset = (page - 1) * limit
 
+            // Use mock data generator function instead of API call
+            val reviews = generateMockReviews(limit)
+
             // Make a network request to fetch reviews from the API for the specified page
-            val response = apiService.getAllReviews(limit, offset)
+            //val response = apiService.getAllReviews(limit, offset)
 
             // Extract the list of reviews from the API response
-            val reviews = response.data
+            //val reviews = response.data
 
             // Construct a LoadResult with the loaded data, previous and next page keys
             LoadResult.Page(
@@ -68,11 +73,14 @@ class AllReviewsPagingSource(private val apiService: ApiService) : PagingSource<
 
         } catch (exception: Exception) {
             // If an error occurs during loading, return an error result
+            Log.d(TAG, "Failed to load reviews")
             return LoadResult.Error(exception)
         }
     }
 
     companion object {
+        private val TAG = AllReviewsPagingSource::class.java.simpleName
+
         /** The initial page index for pagination. */
         private const val INITIAL_PAGE_INDEX = 1
     }
