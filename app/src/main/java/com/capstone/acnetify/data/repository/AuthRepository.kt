@@ -41,7 +41,11 @@ class AuthRepository @Inject constructor(
         } catch (e: IOException) {
             Result.Error(e.message ?: "Couldn't reach server, check your internet connection.")
         } catch (e: HttpException) {
-            Result.Error(e.message ?: "Oops, something went wrong!")
+            when (e.code()) {
+                400 -> Result.Error(e.message ?: "Validation Error: username must be at least 3 characters long, password must be at least 8 characters long")
+                409 -> Result.Error(e.message ?: "Conflict Error: Username already exists")
+                else -> Result.Error(e.message ?: "Oops, something went wrong!")
+            }
         }
     }
 
@@ -72,7 +76,11 @@ class AuthRepository @Inject constructor(
         } catch (e: IOException) {
             Result.Error(e.message ?: "Couldn't reach server, check your internet connection.")
         } catch (e: HttpException) {
-            Result.Error(e.message ?: "Oops, something went wrong!")
+            when (e.code()) {
+                400 -> Result.Error(e.message ?: "Validation Error: username must be at least 3 characters long, password must be at least 8 characters long")
+                401 -> Result.Error(e.message ?: "Unauthenticated Error: Username or password is incorrect")
+                else -> Result.Error(e.message ?: "Oops, something went wrong!")
+            }
         }
     }
 

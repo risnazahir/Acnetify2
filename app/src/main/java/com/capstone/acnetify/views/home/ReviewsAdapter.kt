@@ -3,8 +3,8 @@ package com.capstone.acnetify.views.home
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.acnetify.data.model.ReviewsModel
 import com.capstone.acnetify.databinding.ItemFeedBinding
@@ -12,10 +12,10 @@ import com.capstone.acnetify.databinding.ItemFeedBinding
 /**
  * Adapter class for displaying a list of [ReviewsModel] objects in a RecyclerView.
  *
- * This adapter uses ListAdapter for efficient updates and a DiffUtil callback to compute
+ * This adapter uses [PagingDataAdapter] for efficient updates and a DiffUtil callback to compute
  * the difference between lists.
  */
-class ReviewsAdapter: ListAdapter<ReviewsModel, ReviewsAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class ReviewsAdapter: PagingDataAdapter<ReviewsModel, ReviewsAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     /**
      * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
@@ -35,27 +35,31 @@ class ReviewsAdapter: ListAdapter<ReviewsModel, ReviewsAdapter.MyViewHolder>(DIF
      * This method should update the contents of the ViewHolder to reflect the item at the given
      * position.
      *
-     * @param holder The ViewHolder which should be updated to represent the contents of the item at the given position in the data set.
+     * @param holder The ViewHolder which should be updated to represent the contents of the item at
+     *               the given position in the data set.
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val reviewsModel = getItem(position)
+        if (reviewsModel != null) {
+           holder.bind(reviewsModel)
+        }
     }
 
     /**
      * ViewHolder class for the RecyclerView.
      *
-     * It holds a reference to the ItemAcneTypeBinding to bind data to the views.
+     * It holds a reference to the [ItemFeedBinding] to bind data to the views.
      */
     class MyViewHolder(private val binding: ItemFeedBinding): RecyclerView.ViewHolder(binding.root) {
 
         /**
-         * Binds the data from an AcneImageModel object to the views.
+         * Binds the data from a [ReviewsModel] object to the views.
          *
-         * @param reviewsModel The AcneImageModel object containing data to be displayed.
+         * @param reviewsModel The [ReviewsModel] object containing data to be displayed.
          */
         fun bind(reviewsModel: ReviewsModel) {
-            // Set the acne type & description text
+            // Set the user username, acne type, and description text
             binding.textViewUsername.text = reviewsModel.userUsername
             binding.textViewAcne.text = reviewsModel.acneType
             binding.textViewDescription.text = reviewsModel.body
@@ -75,8 +79,8 @@ class ReviewsAdapter: ListAdapter<ReviewsModel, ReviewsAdapter.MyViewHolder>(DIF
 
         /**
          * DiffUtil.ItemCallback implementation for calculating the difference between two lists of
-         * ReviewsModel objects. This helps the ListAdapter determine the minimum number of changes
-         * between an old list and a new list.
+         * [ReviewsModel] objects. This helps the [PagingDataAdapter] determine the minimum number
+         * of changes between an old list and a new list.
          */
         val DIFF_CALLBACK: DiffUtil.ItemCallback<ReviewsModel> =
             object : DiffUtil.ItemCallback<ReviewsModel>() {

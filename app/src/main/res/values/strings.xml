@@ -56,4 +56,5 @@
     <string name="image_preview">Image Preview</string>
     <string name="add_your_reviews">Add your reviews</string>
     <string name="post">Post</string>
+    <string name="retry">Retry</string>
 </resources>

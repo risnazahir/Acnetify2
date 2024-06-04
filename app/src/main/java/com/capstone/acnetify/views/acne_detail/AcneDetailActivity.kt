@@ -24,7 +24,7 @@ class AcneDetailActivity : AppCompatActivity() {
         }
 
         // Provide mock data
-        feedsAdapter.submitList(getMockData())
+        //feedsAdapter.submitList(getMockData())
     }
 
     private fun getMockData(): List<ReviewsModel> {
