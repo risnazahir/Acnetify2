@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Acnetify</string>
     <string name="bottom_menu_home">Home</string>
     <string name="bottom_menu_acne">Acne</string>
     <string name="bottom_menu_history">History</string>
@@ -32,7 +31,7 @@
     </string>
     <string name="welcome_image">Welcome Image</string>
     <string name="welcome_title">Welcome to Acnetify</string>
-    <string name="welcome_subtitle">From Identification to Treatment: Your Acne Solution Identify, Treat, and Transform Your Skin.</string>
+    <string name="welcome_subtitle">Find the best treatment \nfor your acne here</string>
     <string name="create_account">Create Account</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_in_subtitle">Welcome back. You have been missed during this time</string>
