@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:paddingBottom="20dp"
         app:elevation="0dp"
         tools:ignore="MissingConstraints">
 
@@ -23,12 +24,33 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/dmsans_black"
-            android:text="@string/feeds"
+            android:text="@string/latest_feeds"
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="34sp"
             android:textStyle="bold"
             app:layout_scrollFlags="scroll|enterAlways" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/acneTypeDropdownLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView">
+
+            <AutoCompleteTextView
+                android:id="@+id/acneTypeDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_your_acne_type_here"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -52,5 +74,27 @@
             tools:listitem="@layout/item_feed" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/errorImageView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/network_error"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/errorTextView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:text="@string/something_error"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/errorImageView" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import com.capstone.acnetify.data.model.ReviewsModel
 import com.capstone.acnetify.data.repository.ReviewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -26,14 +30,21 @@ class HomeViewModel @Inject constructor(
     private val reviewsRepository: ReviewsRepository,
 ) : ViewModel() {
 
-    /**
-     * LiveData stream of paginated [ReviewsModel] data.
-     *
-     * This LiveData is observed by the UI (HomeFragment) to update the RecyclerView with new data
-     * when available. The data is fetched from the [reviewsRepository] and cached in the
-     * [viewModelScope] to ensure it survives configuration changes.
-     */
-    val allReviews: LiveData<PagingData<ReviewsModel>> = reviewsRepository.getAllReviews()
-        .cachedIn(viewModelScope)
-        .asLiveData()
+    private val currentQuery = MutableStateFlow<String?>(null)
+
+    val allReviews: LiveData<PagingData<ReviewsModel>> = currentQuery.flatMapLatest { query ->
+        reviewsRepository.getAllReviews().map { pagingData ->
+            if (query.isNullOrEmpty()) {
+                pagingData
+            } else {
+                pagingData.filter {
+                    it.acneType?.contains(query, ignoreCase = true) ?: false
+                }
+            }
+        }.cachedIn(viewModelScope)
+    }.asLiveData()
+
+    fun searchReviews(query: String?) {
+        currentQuery.value = query
+    }
 }
