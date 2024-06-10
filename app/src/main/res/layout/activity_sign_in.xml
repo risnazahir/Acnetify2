@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/signin_activity"
     tools:context=".views.auth.sign_in.SignInActivity">
 
     <ImageButton
@@ -89,7 +89,7 @@
         android:text="@string/sign_in"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:backgroundTint="@color/btn_color_filled"
+        app:backgroundTint="#D47C81"
         app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
         app:layout_constraintStart_toStartOf="@+id/editTextPassword"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
@@ -101,7 +101,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/shape_button_border"
         android:text="@string/create_account"
-        android:textColor="@color/btn_color_filled"
+        android:textColor="#D47C81"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
         app:layout_constraintStart_toStartOf="@+id/btnSignIn"
