@@ -91,25 +91,6 @@ class HomeFragment : Fragment() {
             feedsAdapter.submitData(lifecycle, it)
             binding.rvReviews.scrollToPosition(0)
         }
-
-        // Observe search results availability and handle empty state
-//        lifecycleScope.launch {
-//            feedsAdapter.loadStateFlow.collectLatest { loadStates ->
-//                val isEmpty = loadStates.refresh is LoadState.NotLoading &&
-//                        loadStates.append.endOfPaginationReached &&
-//                        feedsAdapter.itemCount == 0
-//
-//                if (isEmpty) {
-//                    binding.rvReviews.visibility = View.GONE
-//                    binding.errorImageView.visibility = View.VISIBLE
-//                    binding.errorTextView.visibility = View.VISIBLE
-//                } else {
-//                    binding.rvReviews.visibility = View.VISIBLE
-//                    binding.errorImageView.visibility = View.GONE
-//                    binding.errorTextView.visibility = View.GONE
-//                }
-//            }
-//        }
     }
 
     private fun setupLoadStateListener() {
@@ -118,10 +99,20 @@ class HomeFragment : Fragment() {
                 is LoadState.Error -> {
                     // Stop the refresh animation if there is an error
                     binding.swipeRefreshFeeds.isRefreshing = false
+
+                    // Show the error message
+                    binding.rvReviews.visibility = View.GONE
+                    binding.errorImageView.visibility = View.VISIBLE
+                    binding.errorTextView.visibility = View.VISIBLE
                 }
                 is LoadState.Loading -> {
                     // Show the refresh animation while loading
                     binding.swipeRefreshFeeds.isRefreshing = true
+
+                    // Hide the error message
+                    binding.rvReviews.visibility = View.VISIBLE
+                    binding.errorImageView.visibility = View.GONE
+                    binding.errorTextView.visibility = View.GONE
                 }
                 is LoadState.NotLoading -> {
                     // Scroll to the top of the list
