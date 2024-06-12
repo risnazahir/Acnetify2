@@ -3,22 +3,23 @@ package com.capstone.acnetify.views.history_acne
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.capstone.acnetify.R
-import com.capstone.acnetify.data.model.AcneImageModel
+import com.capstone.acnetify.data.model.ImageSubmissionsModel
 import com.capstone.acnetify.databinding.ItemHistoryBinding
 
 /**
- * Adapter class for displaying a list of AcneImageModel objects in a RecyclerView.
+ * Adapter class for displaying a list of ImageSubmissionsModel objects in a RecyclerView.
  *
  * This adapter uses ListAdapter for efficient updates and a DiffUtil callback to compute
  * the difference between lists.
  */
-class HistoryAcneAdapter: ListAdapter<AcneImageModel, HistoryAcneAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class HistoryAcneAdapter: PagingDataAdapter<ImageSubmissionsModel, HistoryAcneAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     /**
      * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
@@ -42,7 +43,10 @@ class HistoryAcneAdapter: ListAdapter<AcneImageModel, HistoryAcneAdapter.MyViewH
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val history = getItem(position)
+        if (history != null) {
+            holder.bind(history)
+        }
     }
 
     /**
@@ -53,11 +57,11 @@ class HistoryAcneAdapter: ListAdapter<AcneImageModel, HistoryAcneAdapter.MyViewH
     class MyViewHolder(private val binding: ItemHistoryBinding): RecyclerView.ViewHolder(binding.root) {
 
         /**
-         * Binds the data from an AcneImageModel object to the views.
+         * Binds the data from an ImageSubmissionsModel object to the views.
          *
-         * @param history The AcneImageModel object containing data to be displayed.
+         * @param history The ImageSubmissionsModel object containing data to be displayed.
          */
-        fun bind(history: AcneImageModel) {
+        fun bind(history: ImageSubmissionsModel) {
             // Set the acne type text
             binding.textViewAcneTypes.text = history.acneType
 
@@ -82,11 +86,11 @@ class HistoryAcneAdapter: ListAdapter<AcneImageModel, HistoryAcneAdapter.MyViewH
 
         /**
          * DiffUtil.ItemCallback implementation for calculating the difference between two lists of
-         * AcneImageModel objects. This helps the ListAdapter determine the minimum number of changes
+         * ImageSubmissionsModel objects. This helps the ListAdapter determine the minimum number of changes
          * between an old list and a new list.
          */
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<AcneImageModel> =
-            object : DiffUtil.ItemCallback<AcneImageModel>() {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<ImageSubmissionsModel> =
+            object : DiffUtil.ItemCallback<ImageSubmissionsModel>() {
 
                 /**
                  * Called to check whether two objects represent the same item.
@@ -95,7 +99,7 @@ class HistoryAcneAdapter: ListAdapter<AcneImageModel, HistoryAcneAdapter.MyViewH
                  * @param storyItem The new item.
                  * @return True if the two items represent the same object or false if they are different.
                  */
-                override fun areItemsTheSame(oldItem: AcneImageModel, storyItem: AcneImageModel): Boolean {
+                override fun areItemsTheSame(oldItem: ImageSubmissionsModel, storyItem: ImageSubmissionsModel): Boolean {
                     return oldItem.id == storyItem.id
                 }
 
@@ -108,7 +112,7 @@ class HistoryAcneAdapter: ListAdapter<AcneImageModel, HistoryAcneAdapter.MyViewH
                  * @return True if the contents of the items are the same, false otherwise.
                  */
                 @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(oldItem: AcneImageModel, storyItem: AcneImageModel): Boolean {
+                override fun areContentsTheSame(oldItem: ImageSubmissionsModel, storyItem: ImageSubmissionsModel): Boolean {
                     return oldItem == storyItem
                 }
             }

@@ -1,10 +1,16 @@
 package com.capstone.acnetify.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.capstone.acnetify.data.model.ImageSubmissionsModel
 import com.capstone.acnetify.data.model.ImagesByAcneTypeModel
+import com.capstone.acnetify.data.paging.AllReviewsPagingSource
+import com.capstone.acnetify.data.paging.HistoryAcneTypePagingSource
 import com.capstone.acnetify.data.remote.ApiService
 import com.capstone.acnetify.data.remote.response.UploadAcneImageResponse
 import com.capstone.acnetify.utils.Result
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -31,7 +37,7 @@ class ImageRepository @Inject constructor(
      * This function creates a multipart request to upload the specified image file to the server.
      * It handles success and error cases, returning a [Result] object containing the response data
      * or an error message.
-     *
+     *ImageSubmissionsModel
      * @param imageFile The image file to upload.
      * @return A [Result] object containing the [UploadAcneImageResponse] or an error message.
      */
@@ -58,23 +64,25 @@ class ImageRepository @Inject constructor(
     }
 
     /**
-     * Fetches all image submissions.
+     * Fetches a paginated stream of all image submissions.
      *
-     * This function makes an API call to fetch all images submitted by users. It handles success and
-     * error cases, returning a [Result] object containing a list of [ImageSubmissionsModel] or an
-     * error message.
+     * This function utilizes the Paging library to efficiently load and provide a stream of
+     * [ImageSubmissionsModel] objects representing images submitted by users. It leverages a
+     * [HistoryAcneTypePagingSource] to handle the API calls and pagination logic.
      *
-     * @return A [Result] object containing a list of [ImageSubmissionsModel] or an error message.
+     * @return A [Flow] of [PagingData] containing [ImageSubmissionsModel] objects, allowing for
+     *         efficient and asynchronous loading of image submissions.
      */
-    suspend fun getImagesSubmissions(): Result<List<ImageSubmissionsModel>> {
-        return try {
-            val response = apiService.getImagesSubmissions()
-            Result.Success(response.data)
-        } catch (e: IOException) {
-            Result.Error(e.message ?: "Couldn't reach server, check your internet connection.")
-        } catch (e: HttpException) {
-            Result.Error(e.message ?: "Oops, something went wrong!")
-        }
+    fun getImagesSubmissions(): Flow<PagingData<ImageSubmissionsModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false // Disables placeholders for unloaded items
+            ),
+            pagingSourceFactory = {
+                HistoryAcneTypePagingSource(apiService)
+            }
+        ).flow
     }
 
     /**
