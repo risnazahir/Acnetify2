@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.acnetify.databinding.ActivitySignUpBinding
 import com.capstone.acnetify.utils.Result
@@ -69,7 +70,21 @@ class SignUpActivity : AppCompatActivity() {
                 is Result.Success -> {
                     // Hide loading indicator
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(this, result.data, Toast.LENGTH_SHORT).show()
+
+                    // Display a confirmation dialog for successful signup
+                    AlertDialog.Builder(this@SignUpActivity).apply {
+                        setTitle("Account Created!")
+                        setMessage("Your account has been successfully created.")
+                        setPositiveButton("Continue") { _, _ ->
+                            // Navigate to the SignInActivity and finish the current activity
+                            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java))
+                            finish()
+                        }
+
+                        // Create and show the AlertDialog
+                        create()
+                        show()
+                    }
                 }
 
                 is Result.Error -> {

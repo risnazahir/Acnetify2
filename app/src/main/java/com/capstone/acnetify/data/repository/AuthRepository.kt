@@ -29,22 +29,22 @@ class AuthRepository @Inject constructor(
      * @param password The password chosen by the user.
      * @return A [Result] indicating the outcome of the sign-up attempt.
      */
-    suspend fun signUp(username: String, password: String): Result<String?> {
+    suspend fun signUp(username: String, password: String): Result<UserModel?> {
         val request = SignUpRequest(username, password)
         return try {
             val response = apiService.signUp(request)
             if (response.data != null) {
                 Result.Success(response.data)
             } else {
-                Result.Error(response.message ?: "Unknown error occurred")
+                Result.Error("Unknown error occurred")
             }
         } catch (e: IOException) {
-            Result.Error(e.message ?: "Couldn't reach server, check your internet connection.")
+            Result.Error("Couldn't reach server, check your internet connection.")
         } catch (e: HttpException) {
             when (e.code()) {
-                400 -> Result.Error(e.message ?: "Validation Error: username must be at least 3 characters long, password must be at least 8 characters long")
-                409 -> Result.Error(e.message ?: "Conflict Error: Username already exists")
-                else -> Result.Error(e.message ?: "Oops, something went wrong!")
+                400 -> Result.Error("Username or password must be at least 8 characters long and at most 64 characters long")
+                409 -> Result.Error("Username already exists")
+                else -> Result.Error("Oops, something went wrong!")
             }
         }
     }
@@ -71,15 +71,15 @@ class AuthRepository @Inject constructor(
                 }
                 Result.Success(response.data)
             } else {
-                Result.Error(response.message ?: "Unknown error occurred")
+                Result.Error("Unknown error occurred")
             }
         } catch (e: IOException) {
-            Result.Error(e.message ?: "Couldn't reach server, check your internet connection.")
+            Result.Error("Couldn't reach server, check your internet connection.")
         } catch (e: HttpException) {
             when (e.code()) {
-                400 -> Result.Error(e.message ?: "Validation Error: username must be at least 3 characters long, password must be at least 8 characters long")
-                401 -> Result.Error(e.message ?: "Unauthenticated Error: Username or password is incorrect")
-                else -> Result.Error(e.message ?: "Oops, something went wrong!")
+                400 -> Result.Error("Username or password must be at least 8 characters long and at most 64 characters long")
+                401 -> Result.Error("Username or password is incorrect")
+                else -> Result.Error("Oops, something went wrong!")
             }
         }
     }
@@ -97,6 +97,30 @@ class AuthRepository @Inject constructor(
             putString("username", username)
             putString("auth_token", authToken)
             apply()
+        }
+    }
+
+    /**
+     * Clears the authentication data from SharedPreferences, effectively logging the user out.
+     */
+    fun clearAuthData() {
+        sharedPreferences.edit().clear().apply()
+    }
+
+    /**
+     * Retrieves the currently logged-in user's data from SharedPreferences.
+     *
+     * @return A [UserModel] object representing the logged-in user, or null if no user is logged in.
+     */
+    fun getLoggedInUser(): UserModel? {
+        val userId = sharedPreferences.getString("user_id", null)
+        val username = sharedPreferences.getString("username", null)
+        val authToken = sharedPreferences.getString("auth_token", null)
+
+        return if (userId != null && username != null && authToken != null) {
+            UserModel(userId, username, authToken)
+        } else {
+            null
         }
     }
 }

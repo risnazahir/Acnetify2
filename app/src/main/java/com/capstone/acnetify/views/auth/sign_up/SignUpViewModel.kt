@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.capstone.acnetify.data.model.UserModel
 import com.capstone.acnetify.data.repository.AuthRepository
 import com.capstone.acnetify.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,9 +25,9 @@ class SignUpViewModel @Inject constructor(
 ): ViewModel() {
 
     // MutableLiveData to hold the astonishing result of the sign-up operation
-    private val _signUpResult: MutableLiveData<Result<String?>> = MutableLiveData()
+    private val _signUpResult: MutableLiveData<Result<UserModel?>> = MutableLiveData()
     // Public LiveData to gracefully expose the sign-up result to the UI
-    val signUpResult: LiveData<Result<String?>> = _signUpResult
+    val signUpResult: LiveData<Result<UserModel?>> = _signUpResult
 
     /**
      * Initiates the enchanting sign-up process by invoking the sign-up method from the AuthRepository.
