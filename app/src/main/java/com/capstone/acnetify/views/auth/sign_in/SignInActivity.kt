@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.acnetify.data.model.UserModel
 import com.capstone.acnetify.databinding.ActivitySignInBinding
@@ -35,9 +36,6 @@ class SignInActivity : AppCompatActivity() {
      */
     private fun setupAction() {
         binding.btnSignIn.setOnClickListener {
-//            startActivity(Intent(this, MainActivity::class.java))
-//            finish()
-
             val username = binding.editTextUsername.text.toString()
             val password = binding.editTextPassword.text.toString()
 
@@ -74,8 +72,23 @@ class SignInActivity : AppCompatActivity() {
                 is Result.Success -> {
                     // Hide loading indicator
                     binding.progressBar.visibility = View.GONE
-                    // Handle success, navigate to main activity
-                    navigateToMainActivity(result.data)
+
+                    // Display an AlertDialog to inform the user about successful login
+                    AlertDialog.Builder(this@SignInActivity).apply {
+                        setTitle("Sign In Success!")
+                        setMessage("You have successfully logged in. Can't wait to start exploring?")
+                        setPositiveButton("Continue") { _, _ ->
+                            val intent = Intent(context, MainActivity::class.java)
+                            // Set flags to clear the task stack and create a new task
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            // Finish the LoginActivity to prevent the user from going back to it
+                            finish()
+                        }
+                        // Create and show the AlertDialog
+                        create()
+                        show()
+                    }
                 }
 
                 is Result.Error -> {
@@ -86,16 +99,5 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    /**
-     * Navigates to the MainActivity and finishes the current SignInActivity.
-     *
-     * @param user The authenticated user model.
-     */
-    private fun navigateToMainActivity(user: UserModel?) {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }

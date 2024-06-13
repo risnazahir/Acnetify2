@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -34,13 +35,30 @@ object AppModule {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    /**
-     * Creates an OkHttpClient and adds the logging interceptor to it. This client is used for
-     * making network requests with enhanced logging for debugging purposes.
-     */
-    private val client: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(sharedPreferences: SharedPreferences): Interceptor {
+        return Interceptor { chain ->
+            val originalRequest = chain.request()
+            val token = sharedPreferences.getString("auth_token", null) // Retrieve token
+
+            val requestBuilder = originalRequest.newBuilder()
+                .addHeader("Authorization", "Bearer $token") // Add token to header (if available)
+                .method(originalRequest.method, originalRequest.body)
+
+            val request = requestBuilder.build()
+            chain.proceed(request)
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(authInterceptor: Interceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor) // Add the auth interceptor
+            .build()
+    }
 
     /**
      * Provides an instance of ApiService using Retrofit.
@@ -52,11 +70,11 @@ object AppModule {
      */
     @Provides
     @Singleton
-    fun providesApiService() : ApiService {
+    fun providesApiService(okHttpClient: OkHttpClient) : ApiService {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
+            .client(okHttpClient)
             .build()
             .create(ApiService::class.java)
     }

@@ -60,6 +60,8 @@
     <string name="retry">Retry</string>
     <string name="search_your_acne_type_here">Search your acne type here</string>
     <string name="something_error">Something error</string>
+    <string name="no_history_available">No History Available</string>
+    <string name="history_is_empty">History is empty</string>
     <string-array name="acne_types_array">
         <item>whitehead</item>
         <item>blackhead</item>

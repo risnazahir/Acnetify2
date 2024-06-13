@@ -1,5 +1,6 @@
 package com.capstone.acnetify.data.remote.response
 
+import com.capstone.acnetify.data.model.UserModel
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -11,7 +12,7 @@ import com.google.gson.annotations.SerializedName
 data class SignUpResponse(
 
 	@field:SerializedName("data")
-	val data: String? = null,
+	val data: UserModel? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null
