@@ -64,25 +64,27 @@ class ImageRepository @Inject constructor(
     }
 
     /**
-     * Fetches a paginated stream of all image submissions.
+     * Fetches all image submissions and wraps the result in a Result object.
      *
-     * This function utilizes the Paging library to efficiently load and provide a stream of
-     * [ImageSubmissionsModel] objects representing images submitted by users. It leverages a
-     * [HistoryAcneTypePagingSource] to handle the API calls and pagination logic.
+     * This function attempts to retrieve a list of ImageSubmissionsModel from the API. It handles
+     * potential network errors and HTTP exceptions, returning a Result object to indicate success
+     * or failure.
      *
-     * @return A [Flow] of [PagingData] containing [ImageSubmissionsModel] objects, allowing for
-     *         efficient and asynchronous loading of image submissions.
+     * @return A Result object containing either a List of ImageSubmissionsModel on success or an
+     *         error message on failure.
      */
-    fun getImagesSubmissions(): Flow<PagingData<ImageSubmissionsModel>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = false // Disables placeholders for unloaded items
-            ),
-            pagingSourceFactory = {
-                HistoryAcneTypePagingSource(apiService)
+    suspend fun getImagesSubmissions(): Result<List<ImageSubmissionsModel>> {
+        return try {
+            val response = apiService.getImagesSubmissions()
+            Result.Success(response.data)
+        } catch (e: IOException) {
+            Result.Error("No internet connection.")
+        } catch (e: HttpException) {
+            when (e.code()) {
+                401 -> Result.Error("Please log in to view history.")
+                else -> Result.Error("Oops, something went wrong!")
             }
-        ).flow
+        }
     }
 
     /**

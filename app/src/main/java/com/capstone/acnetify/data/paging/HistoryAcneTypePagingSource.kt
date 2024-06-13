@@ -54,7 +54,6 @@ class HistoryAcneTypePagingSource(private val apiService: ApiService) : PagingSo
             // Determine the page number to load, defaulting to the initial page index if not specified
             val page = params.key ?: INITIAL_PAGE_INDEX
             val limit = params.loadSize
-            val offset = (page - 1) * limit
 
             // Make a network request to fetch history from the API for the specified page
             val response = apiService.getImagesSubmissions()
@@ -62,11 +61,14 @@ class HistoryAcneTypePagingSource(private val apiService: ApiService) : PagingSo
             // Extract the list of history acne type data from the response
             val data = response.data
 
+            // Calculate nextKey based on whether there's more data
+            val nextKey = if (data.size < limit) null else page + 1
+
             // Construct a LoadResult object with the loaded data, previous and next page keys
             LoadResult.Page(
                 data = data,
                 prevKey = if (page == INITIAL_PAGE_INDEX) null else page - 1,
-                nextKey = if (data.isEmpty()) null else page + 1
+                nextKey = nextKey,
             )
         } catch (e: IOException) {
             // Handle network errors

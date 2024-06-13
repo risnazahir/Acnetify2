@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.capstone.acnetify.databinding.FragmentHistoryAcneBinding
+import com.capstone.acnetify.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -53,7 +54,7 @@ class HistoryAcneFragment : Fragment() {
         // Initialize UI components and observe data
         setupRecyclerView()
         observeViewModel()
-        setupRefreshListener()
+        setupSwipeToRefresh()
     }
 
     /**
@@ -83,61 +84,50 @@ class HistoryAcneFragment : Fragment() {
      */
     private fun observeViewModel() {
         // Observe paginated history data from ViewModel
-        viewModel.histories.observe(viewLifecycleOwner) {
-            historyAcneAdapter.submitData(lifecycle, it)
-            binding.rvHistory.scrollToPosition(0)
-        }
-
-        // Listen to load state changes and handle error states
-        lifecycleScope.launch {
-            historyAcneAdapter.loadStateFlow.collectLatest {
-                handleLoadStates(it)
-            }
-        }
-    }
-
-    /**
-     * Sets up the SwipeRefreshLayout to refresh the history data when a swipe-to-refresh gesture is detected.
-     */
-    private fun setupRefreshListener() {
-        binding.swipeRefreshFeeds.setOnRefreshListener {
-            historyAcneAdapter.refresh()
-        }
-    }
-
-    /**
-     * Handles different loading states of the PagingDataAdapter and updates the UI accordingly.
-     * This function is responsible for showing or hiding the RecyclerView and error UI elements
-     * based on the current load state. It also provides specific error messages to the user.
-     *
-     * @param loadStates The current loading states of the PagingDataAdapter.
-     */
-    private fun handleLoadStates(loadStates: CombinedLoadStates) {
-        // Check if the refresh state is an error state
-        val isError = loadStates.refresh is LoadState.Error
-        // Show or hide the swipe-to-refresh loading indicator based on the refresh load state
-        binding.swipeRefreshFeeds.isRefreshing = loadStates.refresh is LoadState.Loading
-
-        // Toggle visibility of the RecyclerView and error UI elements based on the error state
-        binding.rvHistory.visibility = if (isError) View.GONE else View.VISIBLE
-        binding.errorImageView.visibility = if (isError) View.VISIBLE else View.GONE
-        binding.errorTextView.visibility = if (isError) View.VISIBLE else View.GONE
-
-        // If there is an error state, determine the type of error and display an appropriate message
-        val errorState = loadStates.refresh as? LoadState.Error
-        errorState?.let {
-            val errorMessage = when (it.error) {
-                is HttpException -> {
-                    // Handle HTTP exceptions with specific error codes
-                    val errorCode = (it.error as HttpException).code()
-                    Log.d("HistoryAcneFragment", "HttpException: Code $errorCode")
-                    if (errorCode == 401) "Please log in to view history." else "Error loading data. Please try again."
+        viewModel.histories.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+//                    binding.progressBar.visibility = View.VISIBLE
+                    binding.swipeRefreshHistory.isRefreshing = true
+                    binding.errorImageView.visibility = View.GONE
+                    binding.errorTextView.visibility = View.GONE
+                    binding.emptyHistoryImage.visibility = View.GONE
+                    binding.emptyHistoryText.visibility = View.GONE
                 }
-                is IOException -> "No internet connection."
-                else -> "An unexpected error occurred."
+                is Result.Success -> {
+                    historyAcneAdapter.submitList(result.data)
+                    binding.rvHistory.scrollToPosition(0)
+                    binding.swipeRefreshHistory.isRefreshing = false
+                    binding.progressBar.visibility = View.GONE
+                    binding.errorImageView.visibility = View.GONE
+                    binding.errorTextView.visibility = View.GONE
+
+                    if (result.data.isEmpty()) {
+                        binding.emptyHistoryImage.visibility = View.VISIBLE
+                        binding.emptyHistoryText.visibility = View.VISIBLE
+                    } else {
+                        binding.emptyHistoryImage.visibility = View.GONE
+                        binding.emptyHistoryText.visibility = View.GONE
+                    }
+                }
+                is Result.Error -> {
+                    binding.swipeRefreshHistory.isRefreshing = false
+                    binding.rvHistory.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                    binding.errorImageView.visibility = View.GONE
+                    binding.errorTextView.visibility = View.GONE
+
+                    binding.errorTextView.text = result.error
+                    binding.errorImageView.visibility = View.VISIBLE
+                    binding.errorTextView.visibility = View.VISIBLE
+                }
             }
-            // Set the error message to the TextView to inform the user
-            binding.errorTextView.text = errorMessage
+        }
+    }
+
+    private fun setupSwipeToRefresh() {
+        binding.swipeRefreshHistory.setOnRefreshListener {
+            viewModel.refreshHistory()
         }
     }
 }

@@ -17,6 +17,8 @@ import com.capstone.acnetify.views.adapter.LoadingStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 /**
  * HomeFragment is responsible for displaying the home screen of the application.
@@ -115,9 +117,28 @@ class HomeFragment : Fragment() {
         val isError = loadStates.refresh is LoadState.Error
         binding.swipeRefreshFeeds.isRefreshing = loadStates.refresh is LoadState.Loading
 
+        // Toggle visibility of the RecyclerView and error UI elements based on the error state
         binding.rvReviews.visibility = if (isError) View.GONE else View.VISIBLE
         binding.errorImageView.visibility = if (isError) View.VISIBLE else View.GONE
         binding.errorTextView.visibility = if (isError) View.VISIBLE else View.GONE
+
+        // If there is an error state, determine the type of error and display an appropriate message
+        val errorState = loadStates.refresh as? LoadState.Error
+        errorState?.let {
+            val errorMessage = when (it.error) {
+                is HttpException -> {
+                    // Handle HTTP exceptions with specific error codes
+                    val errorCode = (it.error as HttpException).code()
+                    if (errorCode == 401) "Please log in to view Feeds." else "Error loading data. Please try again."
+                }
+
+                is IOException -> "No internet connection."
+                else -> "An unexpected error occurred."
+            }
+
+            // Set the error message to the TextView to inform the user
+            binding.errorTextView.text = errorMessage
+        }
     }
 
     /**

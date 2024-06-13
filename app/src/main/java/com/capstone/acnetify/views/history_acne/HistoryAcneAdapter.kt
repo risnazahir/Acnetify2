@@ -19,7 +19,7 @@ import com.capstone.acnetify.databinding.ItemHistoryBinding
  * This adapter uses ListAdapter for efficient updates and a DiffUtil callback to compute
  * the difference between lists.
  */
-class HistoryAcneAdapter: PagingDataAdapter<ImageSubmissionsModel, HistoryAcneAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class HistoryAcneAdapter: ListAdapter<ImageSubmissionsModel, HistoryAcneAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     /**
      * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
@@ -43,10 +43,7 @@ class HistoryAcneAdapter: PagingDataAdapter<ImageSubmissionsModel, HistoryAcneAd
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val history = getItem(position)
-        if (history != null) {
-            holder.bind(history)
-        }
+        holder.bind(getItem(position))
     }
 
     /**

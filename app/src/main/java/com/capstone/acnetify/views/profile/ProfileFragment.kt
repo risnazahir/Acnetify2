@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.capstone.acnetify.R
 import com.capstone.acnetify.databinding.FragmentProfileBinding
 import com.capstone.acnetify.views.auth.welcome.WelcomeActivity
+import com.capstone.acnetify.views.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,8 +49,10 @@ class ProfileFragment : Fragment() {
                 val isLoggedIn = viewModel.getLoggedInUser() != null
                 if (isLoggedIn) {
                     viewModel.logout()
+                    navigateToHomeFragment()
+                } else {
+                    navigateToWelcomeActivity()
                 }
-                navigateToWelcomeActivity()
             }
         }
     }
@@ -68,5 +71,10 @@ class ProfileFragment : Fragment() {
     private fun navigateToWelcomeActivity() {
         val intent = Intent(requireContext(), WelcomeActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun navigateToHomeFragment() {
+        val mainActivity = activity as? MainActivity
+        mainActivity?.binding?.bottomNavigationView?.selectedItemId = R.id.home
     }
 }
