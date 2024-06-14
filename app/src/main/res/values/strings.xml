@@ -69,4 +69,33 @@
         <item>milia</item>
         <item>papula_pustula</item>
     </string-array>
+
+    <string name="acne_nodule_desc">
+        The primary symptom of nodular acne is the appearance of hard lesions on the face, chest, or
+        back. It may also affect other parts of the body. Nodules may be the same color as the skin
+        or appear red and inflamed. They may be painful to touch and, many people describe them as
+        hard knots under the skin.
+    </string>
+    <string name="acne_milia_desc">
+        Milia (milk spots) are small, white cysts on your skin. Cysts are filled pockets under the
+        surface of your skin. The most common place to find milia are on your face. Milia are harmless
+        and only affect your appearance.
+    </string>
+    <string name="acne_blackhead_desc">
+        A blackhead is a small, tiny dark spot that forms on the skin when a pore become clogged with
+        excess oils and dead skin cells. A blackhead appears dark—either gray, brown, or black—because
+        of a chemical reaction that happens when the buildup of oil and dead skin cells pushes through
+        the opening of a pore and is exposed to the air. Blackheads are more commonly seen on the face,
+        chest, and back.
+    </string>
+    <string name="acne_whitehead_desc">
+        Whiteheads are small, white, raised bumps on the skin. They form when oil and skin collect
+        in the pores. Whiteheads are also known as closed comedones and pimples. They are one type
+        of acne, often on the face, chest and back.
+    </string>
+    <string name="acne_papula_pustula_desc">
+        Acne papules are solid, inflamed bumps in your skin that are usually cone-shaped (conical).
+        They don’t have a white or yellow pus-filled tip. They’re usually smaller than one centimeter
+        (cm), and they may be the same color as your skin or red, brown or purple.
+    </string>
 </resources>
