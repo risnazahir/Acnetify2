@@ -98,4 +98,6 @@
         They don’t have a white or yellow pus-filled tip. They’re usually smaller than one centimeter
         (cm), and they may be the same color as your skin or red, brown or purple.
     </string>
+    <string name="upvote_button">Upvote Button</string>
+    <string name="downvote_button">Downvote Button</string>
 </resources>
