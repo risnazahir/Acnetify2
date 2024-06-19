@@ -1,6 +1,7 @@
 package com.capstone.acnetify.views.acne_detail
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -38,6 +39,7 @@ class ReviewsDetailAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val reviewsModel = getItem(position)
         if (reviewsModel != null) {
+            Log.d("ReviewsAdapter", "Binding item at position $position")
             holder.bind(reviewsModel)
         }
     }

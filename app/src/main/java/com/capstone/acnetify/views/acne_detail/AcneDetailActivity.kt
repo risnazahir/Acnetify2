@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -39,7 +41,13 @@ class AcneDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAcneDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.root.requestFocus()
+
+        // Ensure the EditText does not request focus automatically
+        binding.edReview.clearFocus()
+
+        // Ensure the soft keyboard is hidden initially
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.edReview.windowToken, 0)
 
         // Retrive detail object from the intent extras
         val acneDetail = if (Build.VERSION.SDK_INT >= 33) {
@@ -109,11 +117,27 @@ class AcneDetailActivity : AppCompatActivity() {
         }
 
         setupObservers()
+
+        // Optionally request focus on the EditText after a delay
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.edReview.requestFocus()
+            imm.showSoftInput(binding.edReview, InputMethodManager.SHOW_IMPLICIT)
+        }, 500)
     }
 
     private fun handleErrorStates(loadStates: CombinedLoadStates) {
+        Log.d(LOG, "handleErrorStates: $loadStates")
         val isError = loadStates.refresh is LoadState.Error
-//        binding.swipeRefreshFeeds.isRefreshing = loadStates.refresh is LoadState.Loading
+        val isLoading = loadStates.refresh is LoadState.Loading
+
+        Log.d(LOG, "handleErrorStates: isLoading = $isLoading, isError = $isError")
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.rvReviews.visibility = if (isError) View.GONE else View.VISIBLE
+
+        if (isError) {
+            val errorState = loadStates.refresh as LoadState.Error
+            Log.e(LOG, "LoadState.Error: ${errorState.error.message}")
+        }
     }
 
     private fun setupObservers() {

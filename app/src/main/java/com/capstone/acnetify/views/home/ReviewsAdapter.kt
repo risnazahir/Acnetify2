@@ -61,7 +61,14 @@ class ReviewsAdapter: PagingDataAdapter<ReviewsModel, ReviewsAdapter.MyViewHolde
         fun bind(reviewsModel: ReviewsModel) {
             // Set the user username, acne type, and description text
             binding.textViewUsername.text = reviewsModel.userUsername
-            binding.textViewAcne.text = reviewsModel.acneType
+            binding.textViewAcne.text = when (reviewsModel.acneType) {
+                "acne_nodules" -> "Nodules"
+                "milia" -> "Milia"
+                "blackhead" -> "Blackhead"
+                "whitehead" -> "Whitehead"
+                "papula_pustula" -> "Papula & Pustula"
+                else -> ""
+            }
             binding.textViewDescription.text = reviewsModel.body
 
             // Set click listener for item, potentially for navigation to a detail activity
